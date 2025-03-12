@@ -3,7 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import { ModeToggle } from "@/components/mode-toggle";
+import { ThemeToggle } from "@/components/mode-toggle";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import { motion } from "framer-motion";
 import { Github, Menu, X } from "lucide-react";
@@ -57,7 +57,7 @@ export default function Navbar() {
               <span className="sr-only">GitHub</span>
             </Link>
           </Button>
-          <ModeToggle />
+          <ThemeToggle />
           <div className="pl-1">
             <LanguageSwitcher />
           </div>
@@ -78,7 +78,7 @@ export default function Navbar() {
                 </Link>
               </Button>
               <div className="flex items-center space-x-4">
-                <ModeToggle />
+                <ThemeToggle />
                 <LanguageSwitcher />
               </div>
             </div>
