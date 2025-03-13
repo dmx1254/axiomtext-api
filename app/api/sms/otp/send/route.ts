@@ -2,11 +2,12 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import axios from "axios";
 import crypto from "crypto";
-import { verifyApiToken } from "@/lib/middleware/auth"; 
+import { verifyApiToken } from "@/lib/middleware/auth";
 import { connectDB } from "@/lib/db";
 import UserModel from "@/lib/models/user.model";
 import OTPModel from "@/lib/models/otp.model";
 import SMSModel from "@/lib/models/sms.model";
+import { checkAmountOfSms } from "@/lib/utils";
 
 await connectDB();
 const SMS_PRO_PRIVATE_KEY = process.env.SMS_PRO_PRIVATE_KEY || "";
@@ -34,10 +35,10 @@ export async function POST(request: NextRequest) {
     const authResult = await verifyApiToken(request);
     // console.log(authResult);
 
-    if (authResult instanceof NextResponse) return authResult;
+    const userId = (authResult as { userId: string }).userId;
 
     // Get user and check solde
-    const user = await UserModel.findById(authResult.userId);
+    const user = await UserModel.findById(userId);
     if (!user) {
       return NextResponse.json(
         { error: "Utilisateur non trouvé" },
@@ -57,20 +58,22 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Check solde
-    if (user.smsCredits <= 0) {
-      return NextResponse.json({ error: "Solde insuffisant" }, { status: 403 });
+    // Vérifier le coût du SMS
+    const smsCost = await checkAmountOfSms(phone);
+    // Vérifier si l'utilisateur a assez de crédits
+    if (user.smsCredits < smsCost) {
+      return NextResponse.json(
+        { error: "Crédits SMS insuffisants" },
+        { status: 400 }
+      );
     }
-
-    // Format phone number
-    const formattedPhone = phone.startsWith("+") ? phone : `+${phone}`;
 
     // Generate OTP code (6 digits)
     const code = Math.floor(100000 + Math.random() * 900000).toString();
 
     // Save OTP to database
     await OTPModel.create({
-      phone: formattedPhone,
+      phone,
       code,
     });
 
@@ -82,7 +85,7 @@ export async function POST(request: NextRequest) {
       SMS_PRO_TOKEN,
       subject,
       signature,
-      formattedPhone,
+      phone,
       message,
       timestamp
     );
@@ -94,7 +97,7 @@ export async function POST(request: NextRequest) {
         token: SMS_PRO_TOKEN,
         subject,
         signature,
-        recipient: formattedPhone,
+        recipient: phone,
         content: message,
         timestamp,
         key,
@@ -112,20 +115,20 @@ export async function POST(request: NextRequest) {
 
     // Save SMS record
     await SMSModel.create({
-      userId: authResult.userId,
+      userId: userId,
       campaignId: "otp",
       campaignName: "OTP Verification",
-      recipient: formattedPhone,
+      recipient: phone,
       message,
       messageId: response.data.messageId || crypto.randomUUID(),
       status: "sent",
       sentAt: new Date(),
-      cost: response.data.cost || 0,
+      cost: smsCost,
       response: JSON.stringify(response.data),
     });
 
-    // Deduct credit and save
-    user.smsCredits -= 1;
+    // Mettre à jour les crédits de l'utilisateur
+    user.smsCredits -= smsCost;
     await user.save();
 
     return NextResponse.json({

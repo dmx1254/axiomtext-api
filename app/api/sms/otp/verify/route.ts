@@ -3,13 +3,26 @@ import type { NextRequest } from "next/server";
 import { verifyApiToken } from "@/lib/middleware/auth";
 import { connectDB } from "@/lib/db";
 import OTPModel from "@/lib/models/otp.model";
+import UserModel from "@/lib/models/user.model";
 
 await connectDB();
 export async function POST(request: NextRequest) {
   try {
     // Verify API token
+    // Verify API token
     const authResult = await verifyApiToken(request);
-    if (authResult instanceof NextResponse) return authResult;
+    // console.log(authResult);
+
+    const userId = (authResult as { userId: string }).userId;
+    const user  = await UserModel.findById(userId)
+    // Validate input
+    if (!user) {
+      return NextResponse.json(
+        { error: "Votre token est invalide" },
+        { status: 401 }
+      );
+    }
+
 
     // Parse request body
     const body = await request.json();
@@ -23,12 +36,9 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Format phone number
-    const formattedPhone = phone.startsWith("+") ? phone : `+${phone}`;
-
     // Find the most recent unverified OTP for this phone number
     const otp = await OTPModel.findOne({
-      phone: formattedPhone,
+      phone: phone,
       verified: false,
       expiresAt: { $gt: new Date() },
     }).sort({ createdAt: -1 });

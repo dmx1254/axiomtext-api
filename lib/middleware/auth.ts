@@ -155,7 +155,7 @@ export async function verifyApiToken(request: NextRequest) {
     // Create successful response with rate limit headers
     const response = NextResponse.json({ userId: apiToken.userId });
     addRateLimitHeaders(response, userRateLimit);
-    return response;
+    return { userId: apiToken.userId };
   } catch (error) {
     console.error("Error verifying API token:", error);
     return NextResponse.json(

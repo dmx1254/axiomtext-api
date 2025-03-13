@@ -6,6 +6,7 @@ import { verifyApiToken } from "@/lib/middleware/auth";
 import { connectDB } from "@/lib/db";
 import UserModel from "@/lib/models/user.model";
 import SMSModel from "@/lib/models/sms.model";
+import { checkAmountOfSms } from "@/lib/utils";
 
 await connectDB();
 const SMS_PRO_PRIVATE_KEY = process.env.SMS_PRO_PRIVATE_KEY || "";
@@ -31,10 +32,11 @@ export async function POST(request: NextRequest) {
   try {
     // Verify API token
     const authResult = await verifyApiToken(request);
-    if (authResult instanceof NextResponse) return authResult;
+    // if (authResult instanceof NextResponse) return authResult;
 
+    const userId = (authResult as { userId: string }).userId;
     // Get user and check credits
-    const user = await UserModel.findById(authResult.userId);
+    const user = await UserModel.findById(userId);
     if (!user) {
       return NextResponse.json(
         { error: "Utilisateur non trouvé" },
@@ -54,16 +56,15 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Check credits
-    if (!user.smsCredits || user.smsCredits <= 0) {
+    // Vérifier le coût du SMS
+    const smsCost = await checkAmountOfSms(to);
+    // Vérifier si l'utilisateur a assez de crédits
+    if (user.smsCredits < smsCost) {
       return NextResponse.json(
         { error: "Crédits SMS insuffisants" },
-        { status: 403 }
+        { status: 400 }
       );
     }
-
-    // Format phone number
-    const formattedPhone = to.startsWith("+") ? to : `+${to}`;
 
     // Prepare API call parameters
     const timestamp = Math.floor(Date.now() / 1000);
@@ -72,7 +73,7 @@ export async function POST(request: NextRequest) {
       SMS_PRO_TOKEN,
       subject,
       signature,
-      formattedPhone,
+      to,
       message,
       timestamp
     );
@@ -84,7 +85,7 @@ export async function POST(request: NextRequest) {
         token: SMS_PRO_TOKEN,
         subject,
         signature,
-        recipient: formattedPhone,
+        recipient: to,
         content: message,
         timestamp,
         key,
@@ -102,21 +103,21 @@ export async function POST(request: NextRequest) {
 
     // Save SMS record
     const sms = await SMSModel.create({
-      userId: authResult.userId,
+      userId: userId,
       campaignId: crypto.randomUUID(),
       campaignName: user.companyName || "unknown",
-      recipient: formattedPhone,
+      recipient: to,
       message,
       messageId: response.data.messageId || crypto.randomUUID(),
       status: "sent",
       sentAt: new Date(),
-      cost: response.data.cost || 0,
+      cost: smsCost,
       response: JSON.stringify(response.data),
     });
 
-    // Deduct credits and save
-    user.smsCredits -= 1;
-    await user.save();
+      // Mettre à jour les crédits de l'utilisateur
+      user.smsCredits -= smsCost;
+      await user.save();
 
     return NextResponse.json({
       success: true,
@@ -124,7 +125,7 @@ export async function POST(request: NextRequest) {
       data: {
         messageId: sms.messageId,
         remainingCredits: user.smsCredits,
-        cost: sms.cost,
+        cost: smsCost,
         status: sms.status,
       },
     });
