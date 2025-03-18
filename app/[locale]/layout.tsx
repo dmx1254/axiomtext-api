@@ -17,11 +17,11 @@ const firaCode = Fira_Code({
   weight: ["400", "500", "600", "700"],
 });
 
-
-
 export const metadata: Metadata = {
-  title: "AxiomText - Plateforme SMS API Professionnelle au Sénégal",
-  description: "Plateforme de messagerie SMS professionnelle basée au Sénégal. API SMS simple et puissante pour vos communications d'entreprise en Afrique et dans le monde.",
+  metadataBase: new URL("https://api.axiomtext.com"),
+  title: "AxiomText API - API d'envoie d'sms et de code otp de la Plateforme SMS professionnelle axiomtext.",
+  description:
+    "Documentation officielle de l'API Axiom TEXT, messagerie SMS professionnelle basée au Sénégal. API SMS simple et puissante pour vos communications d'entreprise en Afrique et dans le monde.",
   keywords: [
     "API SMS",
     "SMS Sénégal",
@@ -39,19 +39,20 @@ export const metadata: Metadata = {
   publisher: "AxiomText",
   robots: "index, follow",
   alternates: {
-    canonical: "https://axiomtext.com",
+    canonical: "https://api.axiomtext.com",
   },
   openGraph: {
     type: "website",
     locale: "fr_SN",
     alternateLocale: "en_US",
-    url: "https://axiomtext.com",
+    url: "https://api.axiomtext.com",
     siteName: "AxiomText",
     title: "AxiomText - Plateforme SMS API Professionnelle au Sénégal",
-    description: "Plateforme de messagerie SMS professionnelle basée au Sénégal. API SMS simple et puissante pour vos communications d'entreprise en Afrique et dans le monde.",
+    description:
+      "Plateforme de messagerie SMS professionnelle basée au Sénégal. API SMS simple et puissante pour vos communications d'entreprise en Afrique et dans le monde.",
     images: [
       {
-        url: "/images/axiomlogo.png",
+        url: "/aaxiom.png",
         width: 800,
         height: 600,
         alt: "AxiomText Logo",
@@ -61,13 +62,15 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "AxiomText - Plateforme SMS API Professionnelle au Sénégal",
-    description: "Plateforme de messagerie SMS professionnelle basée au Sénégal. API SMS simple et puissante pour vos communications d'entreprise en Afrique et dans le monde.",
+    description:
+      "Plateforme de messagerie SMS professionnelle basée au Sénégal. API SMS simple et puissante pour vos communications d'entreprise en Afrique et dans le monde.",
     creator: "@axiomtext",
-    images: ["/images/axiomlogo.png"],
+    images: ["/aaxiom.png"],
   },
   icons: {
-    icon: "/images/axiomlogo.png",
-    apple: "/images/axiomlogo.png",
+    icon: "/favicon.png",
+    shortcut: "/favicon.png",
+    apple: "/favicon.png",
   },
   viewport: "width=device-width, initial-scale=1.0",
   themeColor: [

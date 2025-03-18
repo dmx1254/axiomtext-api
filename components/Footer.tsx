@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Facebook, Instagram, Linkedin, Twitter, Youtube } from "lucide-react";
+import { Facebook, Instagram, Linkedin, Youtube } from "lucide-react";
 import { useScopedI18n } from "@/locales/client";
 import Image from "next/image";
 
@@ -12,27 +12,23 @@ export function Footer() {
   const socialLinks = [
     {
       name: "LinkedIn",
-      href: "https://www.linkedin.com/company/axiomtext",
+      href: "https://www.linkedin.com/in/axiomtext-sms-84105521b",
       icon: Linkedin,
     },
     {
       name: "Facebook",
-      href: "https://www.facebook.com/axiomtext",
+      href: "https://www.facebook.com/profile.php?viewas=100000686899395&id=61573974278248",
       icon: Facebook,
     },
-    {
-      name: "Twitter",
-      href: "https://twitter.com/axiomtext",
-      icon: Twitter,
-    },
+
     {
       name: "Instagram",
-      href: "https://www.instagram.com/axiomtext",
+      href: "https://www.instagram.com/servicesms.contact/",
       icon: Instagram,
     },
     {
       name: "YouTube",
-      href: "https://www.youtube.com/axiomtext",
+      href: "https://www.youtube.com/channel/UC3GOKopT10KN2OTZSVk5KJg",
       icon: Youtube,
     },
   ];
@@ -44,7 +40,12 @@ export function Footer() {
           {/* Logo et Description */}
           <div className="max-w-sm">
             {/* <h3 className="text-xl font-semibold text-primary">AxiomText</h3> */}
-            <Image src="/images/axiomlogo.png" alt="AxiomText" width={140} height={140} />
+            <Image
+              src="/images/axiomlogo.png"
+              alt="AxiomText"
+              width={140}
+              height={140}
+            />
             <p className="mt-2 text-sm text-muted-foreground">
               {tScope("description")}
             </p>

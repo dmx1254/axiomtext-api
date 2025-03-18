@@ -1,6 +1,7 @@
 export default {
-  "docs.title": "Axiom TEXT API",
-  "docs.description": "Integrate our SMS service into your applications in minutes",
+  "docs.title": "Official Documentation of the Axiom TEXT API",
+  "docs.description":
+    "Integrate our SMS service into your applications in minutes",
   "docs.quickstart": "Quick Start",
   "docs.authentication": "Authentication",
   "docs.messages": "Messages",
@@ -21,29 +22,35 @@ export default {
   "docs.subsections.examples": "Examples",
   "docs.subsections.general": "General",
   "docs.sendSMS": "Send SMS",
-  "docs.sendSMSDesc": "Send SMS to your users with a custom signature.",
+  "docs.sendSMSDesc":
+    "Send SMS to your users with a custom signature. National SMS (within Senegal) costs 1 credit per message, deducted from the user's balance. International SMS costs 3 credits per message.",
   "docs.endpoint": "Endpoint",
   "docs.parameters": "Parameters",
   "docs.codeExamples": "Code Examples",
   "docs.responses": "Responses",
   "docs.sendOTP": "Send OTP",
-  "docs.sendOTPDesc": "Send an OTP code to a phone number for verification.",
+  "docs.sendOTPDesc":
+    "Send an OTP code to a phone number for verification. National SMS (within Senegal) costs 1 credit per message, deducted from the user's balance. International SMS costs 3 credits per message.",
   "docs.verifyOTP": "Verify OTP",
-  "docs.verifyOTPDesc": "Verify if the OTP code entered by the user is correct.",
+  "docs.verifyOTPDesc":
+    "Verify if the OTP code entered by the user is correct.",
   "docs.rateLimitsDesc": "The API has a limit of 1000 requests per hour, per:",
   "docs.rateLimitsIP": "IP Address",
   "docs.rateLimitsUser": "User (API token)",
   "docs.rateLimitsReset": "Limits reset every hour",
   "docs.rateLimitsHeaders": "Rate Limit Headers",
   "docs.getAPIKey": "Get your API key",
-  "docs.getAPIKeyDesc": "To use the SMS API, you first need to get an API key. Follow these steps:",
+  "docs.getAPIKeyDesc":
+    "To use the SMS API, you first need to get an API key. Follow these steps:",
   "docs.loginDashboard": "Log in to your dashboard",
-  "docs.accessSettings": "Go to \"Settings\" section",
-  "docs.accessAPI": "Go to \"API\" section",
-  "docs.generateToken": "Click on \"Generate token\"",
+  "docs.accessSettings": 'Go to "Settings" section',
+  "docs.accessAPI": 'Go to "API" section',
+  "docs.generateToken": 'Click on "Generate token"',
   "docs.important": "Important",
-  "docs.tokenVisibility": "Copy your token immediately as it won't be visible later",
-  "docs.authDesc": "All API requests must include your authentication token in the HTTP header.",
+  "docs.tokenVisibility":
+    "Copy your token immediately as it won't be visible later",
+  "docs.authDesc":
+    "All API requests must include your authentication token in the HTTP header.",
   "docs.authHeader": "Authentication Header",
   "docs.authLimits": "Request Limits",
   "docs.authLimitsDesc": "The API has a limit of 1000 requests per hour, per:",
@@ -58,7 +65,8 @@ export default {
   "notFound.subtitle": "Oops! The page you're looking for doesn't exist.",
   "notFound.backHome": "Back to home",
   "notFound.desc": "If you think this is an error, please contact support.",
-  "footer.description": "Professional SMS messaging platform for your business communications.",
+  "footer.description":
+    "Professional SMS messaging platform for your business communications.",
   "footer.followUs": "Follow us on",
   "footer.allRightsReserved": "All rights reserved.",
 } as const;

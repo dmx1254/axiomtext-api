@@ -331,7 +331,7 @@ export function DocsContent() {
 
       {/* Main Content */}
       <div className="flex-1 min-h-[calc(100vh-3.5rem)]">
-        <div className="w-full max-w-4xl mx-auto px-4 lg:px-8 py-6">
+        <div className="w-full mx-auto px-4 lg:px-8 py-6">
           <div className="prose prose-zinc dark:prose-invert max-w-none">
             {/* Hero Section */}
             <div className="mb-12 space-y-4">
